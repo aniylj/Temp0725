@@ -1,0 +1,75 @@
+(2)-(Add Two Numbers)-(将两个ListNode表示的整树进行按位加)-(ListNode的遍历)
+
+Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
+Output: 7 -> 0 -> 8
+
+
+//这里考察单链表的尾插法：
+//首先，申请内存final_ans
+//r_ans指向final_ans,
+//在进行尾插时，每次生成的temp_ans申请内存，
+
+/*
+	(1)r_ans.next=temp_ans;
+	(2)r_ans=r_ans.next;
+	(3)返回final_ans,是链表的头
+*/
+
+public class Solution 
+{
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2)
+    {
+        int next_sum=0;
+         
+        ListNode final_ans = new ListNode(0);
+		ListNode r_ans = final_ans;
+        
+		//即使l1和l2都木有了，还有一个进位为1时，仍然需要考虑
+        while(l1!=null || l2!=null || next_sum==1)   
+        {
+            int curr_node1=0;
+            int curr_node2=0;
+            int curr_sum=0;  //给下一位的进位
+           
+            if(l1!=null)
+            {
+                curr_node1=l1.val;
+                l1=l1.next;
+            }
+            else
+            {
+                curr_node1=0;
+            }
+			
+            if(l2!=null)
+            {
+                curr_node2=l2.val;
+                l2=l2.next;
+            }
+            else
+            {
+            	curr_node2=0;
+            }
+            
+            curr_sum=curr_node1+curr_node2+next_sum;  //三者值相加，得到当前位的值
+            
+            if(curr_sum>9)
+            {
+                curr_sum=curr_sum-10;
+                next_sum=1;      //给下一位的进位为1
+            }
+            else
+            {
+                next_sum=0;    //给下一位的进位为0
+            }
+            
+            ListNode temp_ans = new ListNode(curr_sum);
+            
+            r_ans.next=temp_ans;
+            
+            r_ans= r_ans.next;
+  
+        }
+        return final_ans.next;
+    }
+}

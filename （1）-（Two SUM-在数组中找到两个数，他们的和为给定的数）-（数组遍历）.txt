@@ -1,0 +1,31 @@
+（1）-（Two SUM-在数组中找到两个数，他们的和为给定的数）-（数组遍历）
+
+Input: numbers={2, 7, 11, 15}, target=9
+Output: index1=1, index2=2
+
+//非常低效的二层循环遍历，勉强能够实现这个效果
+//都初始化为-1，如果找不到，返回两个-1.
+public class Solution
+{
+    public int[] twoSum(int[] nums, int target) 
+    {
+        int []index=new int[2];
+        index[0]=-1;
+        index[1]=-1;
+        int leng=nums.length;
+        for(int curr_index1=0;curr_index1<leng;curr_index1++)
+        {
+            for(int curr_index2=curr_index1+1;curr_index2<leng;curr_index2++)
+            {
+                int curr_sum=nums[curr_index1]+nums[curr_index2];
+                if(curr_sum==target)
+                {
+                    index[0]=curr_index1+1;
+                    index[1]=curr_index2+1;
+                    return index;
+                }
+            }
+        }
+        return index;
+    }
+}

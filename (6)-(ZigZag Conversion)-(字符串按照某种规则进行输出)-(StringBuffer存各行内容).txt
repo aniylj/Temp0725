@@ -1,0 +1,85 @@
+(6)-(ZigZag Conversion)-(字符串按照某种规则进行输出)-(StringBuffer存各行内容)
+
+//The string "PAYPALISHIRING" is written in a zigzag pattern 
+//on a given number of rows like this: 
+//(you may want to display this pattern in a fixed font for better legibility)
+/*
+
+P   A   H   N
+A P L S I I G
+Y   I   R
+
+/*
+//And then read line by line: "PAHNAPLSIIGYIR"
+//string convert(string text, int nRows);
+//convert("PAYPALISHIRING", 3) 
+//should return "PAHNAPLSIIGYIR".
+
+public class Solution 
+{
+    public String convert(String s, int numRows)  //一竖排有几个
+    {
+		//这种不超过一竖排的，或者一竖排就一个的，不需要处理
+        if(s.length()<numRows+1 || numRows == 1)
+        {
+            return s;
+        }
+		
+        String final_s=new String(); //最后的字符串的结果
+        
+		int row=0;  //行号
+        int col=0;  //列号
+        
+        char []s_ch=s.toCharArray(); 
+        int s_len=s_ch.length;
+    	
+		//一个对象为（字符）的数组,记录每一行的值
+        StringBuffer [] temp_s=new StringBuffer[numRows];
+        for(int i=0;i<numRows;i++)
+        {
+            temp_s[i]=new StringBuffer();
+        }
+		
+        int curr_i=0; //当前的行号，一共有numRows行
+        int curr_j=0; //当前的列号
+    
+        int k=0;
+        while(k<s_len) 
+        {
+            int state=curr_j%(numRows-1);
+			//这一列要插满值
+            if(state==0)   
+            {
+				//未填满这一列中的这么多行
+                if(curr_i<numRows) 
+                {
+					//对应的行号中-添加一个记录值
+                    temp_s[curr_i].append(s_ch[k]);  
+                    k++; 	  //处理下一个字符
+                    curr_i++; //进入下一行
+                }
+				//已经填满，转到下一列
+                else 
+                {
+                   curr_i=0;  //当前行号恢复为0
+                   curr_j++; //转入到下一行
+                }
+            }
+			//这一列只需要1个值，列号固定，行号=numRows-1-state
+            else  
+            {
+                temp_s[numRows-1-state].append(s_ch[k]);
+				k++;      //处理下一个字符
+                curr_j++; //转入到下一列
+                
+            }
+        }
+		
+		//将各行中的字符进行拼接
+        for(int i=0;i<numRows;i++)
+        {
+            final_s+=temp_s[i].toString();
+        }
+        return final_s;
+    }
+}

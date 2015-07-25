@@ -1,0 +1,87 @@
+(7)-(Reverse Integer)-(将整数按位反转成另外一个整数，考虑溢出)-(知道最大整数和最小整数值)
+
+//Reverse digits of an integer.
+
+//Example1: x = 123, return 321
+//Example2: x = -123, return -321
+
+//需要考虑正负数
+//最大正整数,Integer.MAX_VALUE=2147483647
+//最小负整数,Integer.MIN_VALUE=-2147483648
+
+public class Solution 
+{
+    public int reverse(int x) 
+    {
+        if(x==0)
+		{ 
+			return x;
+		}
+        int final_x=0, temp_x=0;
+        int [] x_val=new int[100];
+        
+        int curr_i=0; //当前位数
+		int x_save=0; //当前位的余数，准备保存
+		
+		int positive=1;
+        if(x<0)
+        {
+			positive=-1; //是负数
+			//特殊情况，因为负数的距离更大一位
+            if(x==-2147483648) 
+			{
+				return 0;
+			}
+            x=x*-1; 
+        }
+        while(x>9) 
+        {
+            x_save=x%10; 
+            x_val[curr_i]=x_save;  //当前位的余数，进行保存
+            x=x/10;                
+            curr_i++;
+        }
+		
+		//还剩下最后一位余数，进行保存
+        x_val[curr_i]=x;
+		curr_i++;
+		
+		
+		//(1)不管合理不合理，我已经进行了保存了，再分析反转后的数字他到底是不是整数
+		//(2)原来的数字是不用进行分析的，因为传进来就是一个int啊，肯定是合理的
+		//(3)不能在整合结束后再进行处理，因为有可能这个int的值已经溢出了
+        for(int i=0;i<curr_i;i++)  
+        {
+			if(final_x<214748364)
+			{
+            	final_x = final_x * 10; 
+            	final_x=final_x+x_val[i];
+			}
+			else
+			{
+				if(final_x==214748364)
+				{
+					if(x_val[i]<8)
+					{
+						final_x = final_x * 10; 
+            			final_x=final_x+x_val[i];
+					}
+					else
+					{
+						final_x=0;
+					}
+				}
+				else
+				{
+					final_x=0;
+				}
+			} 
+        }
+		//如果是负数，乘以-1
+        if(positive==-1)
+        {
+            final_x=final_x * -1;
+        }
+        return final_x;
+    }
+}

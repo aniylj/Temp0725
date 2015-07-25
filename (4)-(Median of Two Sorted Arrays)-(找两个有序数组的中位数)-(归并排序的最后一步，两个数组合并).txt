@@ -1,0 +1,88 @@
+(4)-(Median of Two Sorted Arrays)-(找两个有序数组的中位数)-(归并排序的最后一步，两个数组合并)
+
+//There are two sorted arrays nums1 and nums2 of size m and n respectively. 
+//Find the median of the two sorted arrays. 
+The overall run time complexity should be O(log (m+n))
+
+
+public class Solution
+{
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) 
+    {
+	    double final_ans=-1;  //记录-最后返回的中位数结果
+		
+		//nums1为空的,只看nums2 
+        if(nums1!=null && nums1.length==0) 
+        {
+            int b_len=nums2.length;
+			//0 1 2 3  为1和2，(4/2-1)和(4/2)
+            if(b_len%2==0) 
+            { 
+				final_ans=0.5*(nums2[b_len/2-1]+nums2[b_len/2]);
+			}
+            else
+			// 0 1 2 为1，(3/2)  
+            {
+				final_ans=nums2[b_len/2];
+			}
+            return final_ans;
+        }
+        else 
+        {   
+			//nums2为空的，只看nums1
+            if(nums2!=null && nums2.length==0) 
+            {
+                int a_len=nums1.length;
+				//0 1 2 3  为1和2，(4/2-1)和(4/2)
+	            if(a_len%2==0) 
+	            { 
+					final_ans=0.5*(nums1[a_len/2-1]+nums1[a_len/2]);
+				}
+				// 0 1 2 为1，(3/2) 
+	            else 
+	            {
+					final_ans=nums1[a_len/2];
+				}
+	            return final_ans;
+            }
+            else
+			//两个数组都不为空
+            {
+				//当做归并排序的最后一步，两个数组合并
+				int i=0, j=0, k=0;
+				int [] temp=new int[nums1.length+nums2.length];
+                while(i<nums1.length && j<nums2.length)
+                {
+                    if(nums1[i]<=nums2[j])  
+					{
+						temp[k++]=nums1[i++]; 
+					}
+                    else
+					{
+						 temp[k++]=nums2[j++]; 
+					}
+                }
+                while(i<nums1.length)
+				{ 
+					temp[k++]=nums1[i++];
+				}
+                while(j<nums2.length)
+				{
+					temp[k++]=nums2[j++]; 
+				}
+                int ans_len=nums1.length+nums2.length;
+				//0 1 2 3 为1和2，（4/2-1）和（4/2）
+                if(ans_len%2==0) 
+                {
+                    final_ans=0.5*(temp[ans_len/2-1]+temp[ans_len/2]);
+                }
+                else
+				//0 1 2 为1，（3/2）
+                {
+                    final_ans=temp[ans_len/2];
+                }
+                return final_ans;
+            }
+        }
+    }
+}

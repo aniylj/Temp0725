@@ -1,0 +1,63 @@
+(3)-(Longest Substring Without Repeating Characters)-(找不重复的最长子串的长度)-(用HashMap和HashSet进行查重)
+
+//the longest substring without repeating letters for "abcabcbb" is "abc", which the length is 3.
+//For "bbbbb" the longest substring is "b", with the length of 1.
+
+import java.util.HashMap;
+import java.util.HashSet;
+public class Solution 
+{
+    public int lengthOfLongestSubstring(String s)
+    {
+		int curr_length=0;  //记录当前不重复字串的长度
+        
+		char [] ch_s=s.toCharArray();        //每一个字符
+		int [] temp_val=new int[s.length()]; //记录各字符对应的不重复字串长度
+        
+		Map <Character,Integer> map_ch =new HashMap<Character,Integer>();
+        Set<Character> set_ch=map_ch.keySet();
+        
+        for(int i=0;i<s.length();i++)
+        {
+            Character curr_s=new Character(ch_s[i]);
+            if(!set_ch.contains(curr_s))  //我是新来的
+            {
+                curr_length=curr_length+1;//当前不重复字串的长度加1
+                temp_val[i]=curr_length;  //记录-该字符对应的不重复字串长度
+                
+                map_ch.put(curr_s,i);  //记录-出现的下标
+            }
+            else
+            {
+              int pre_index=map_ch.get(curr_s).intValue(); //找到该字符，在上一次出现的下标，
+              
+			  //已经无所谓了，超出了这个范围
+              if(i-pre_index>curr_length)
+              {
+                  curr_length=curr_length+1;//当前不重复字串的长度加1 
+                  temp_val[i]=curr_length;  //记录-该字符对应的不重复字串长度
+                  map_ch.put(curr_s,i);  //记录-出现的下标
+              }
+			  //还是有影响的 如dcdc
+              else   
+              {
+                curr_length=i-pre_index;  //abcdea， 当前不重复长度为两次出现下标差 
+                temp_val[i]=curr_length;  //记录-该字符对应的不重复字串长度
+                map_ch.put(curr_s,i);     //记录-出现的下标
+              }
+            }
+        }
+        
+		//遍历  记录-字符对应的不重复字串长度 的数组，
+		//找最大值，返回最大值
+        int max_n=0;
+        for(int i=0;i<s.length();i++)
+        {
+            if(temp_val[i]>max_n)
+            {
+                max_n=temp_val[i];
+            }
+        }
+        return max_n;
+    }
+}
